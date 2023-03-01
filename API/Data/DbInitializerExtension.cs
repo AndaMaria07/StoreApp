@@ -1,0 +1,31 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace API.Data
+{
+    public static class DbInitializerExtension
+    {
+        public static IApplicationBuilder UseItToSeedSqlServer(this IApplicationBuilder app)
+    {
+        ArgumentNullException.ThrowIfNull(app, nameof(app));
+
+        using var scope = app.ApplicationServices.CreateScope();
+        var services = scope.ServiceProvider;
+        try
+        {
+            var context = services.GetRequiredService<StoreContext>();
+            DbInitializer.Initialize(context);
+        }
+        catch (Exception ex)
+        {
+
+        }
+
+        return app;
+
+    
+    }
+    }
+}
